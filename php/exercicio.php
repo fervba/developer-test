@@ -17,8 +17,18 @@ class exercicio extends Spider {
     }
     
     public function acessarSintegra(){
-        $acesso = $this->request('http://www.sintegra.es.gov.br/resultado.php', 'POST', 'http://www.sintegra.es.gov.br/index.php', array('num_cnpj'=>$this->getCnpj()));
+        $resultado = array();
+        $parametros = array(
+            'num_cnpj' => $this->getCnpj(),
+            'botao' => 'Consultar'
+        );
+        $acesso = $this->request('http://www.sintegra.es.gov.br/resultado.php', 'POST', 'http://www.sintegra.es.gov.br/index.php', $parametros);
         
-        return $acesso;
+        $padrao = '#<td ?.*>(.*?)</td>#';
+        preg_match_all($padrao, $acesso, $resultado);
+        
+        $resultado = count($resultado) > 0 ? $resultado[1] : $resultado; 
+        
+        return json_encode($resultado);
     }
 } 
