@@ -27,8 +27,8 @@ class exercicio extends Spider {
         $padrao = '#<td ?.*>(.*?)</td>#';
         preg_match_all($padrao, $acesso, $resultado);
         
-        $resultado = count($resultado) > 0 ? $resultado[1] : $resultado; 
+        $resultado = count($resultado) > 0 ? array_map('utf8_encode', $resultado[1]) : $resultado; 
         
-        return json_encode($resultado);
+        return json_encode($resultado, true);
     }
 } 
